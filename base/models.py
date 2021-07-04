@@ -1,5 +1,5 @@
 from django.db import models
-
+from .utils import get_duration
 
 
 
@@ -34,7 +34,7 @@ class Track(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name="tracks")
     title = models.CharField(max_length=120)
     source = models.FileField(upload_to=trackSourcePath)
-    duration = models.FloatField()
+    duration = models.FloatField(editable=False)
     cover = models.ImageField(upload_to=trackCoverPath)
     upload_date = models.DateField(auto_now_add=True)
     
@@ -60,3 +60,17 @@ class Track(models.Model):
 
     def __str__(self):
         return self.title + "   " + self.artist.nickname
+        
+    
+    def save(self, *args, **kwargs):
+        self.duration = get_duration(self.source.file)
+        super().save(*args, **kwargs)
+    
+    
+    
+    
+    
+    
+    
+        
+        

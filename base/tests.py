@@ -43,4 +43,17 @@ class ModelTestCase(TestCase):
 
     def test_track(self):
         track = Track.objects.get(title="Uletay (feat. VERA)", artist=1)
-        return self.assertNotEqual(track, None)
+
+        self.assertNotEqual(track, None)
+        self.assertEqual(track.duration, 190.584)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
