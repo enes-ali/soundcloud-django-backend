@@ -5,6 +5,7 @@ from django.core.files.images import ImageFile
 from django.core.files import File
 import datetime
 from django.conf import settings
+from account.models import Account
 
 
 class ModelTestCase(TestCase):
@@ -23,9 +24,8 @@ class ModelTestCase(TestCase):
             "cover.jpg")
 
         # Create user
-        user = User.objects.create(username="TestAccount")
-        user.set_password("test_account")
-        user.save()
+        user = Account.objects.create_user(email="enes@gmail.com", username="LastShoot",
+            password="Enes123", name="Enes", surname="Karakobak", age=17, gender=Account.MALE)
 
         ## Create artist
         artist = Artist.objects.create(account=user, nickname="Otnicka", profile_photo=profile_photo_file,
