@@ -1,6 +1,6 @@
 from django.db import models
 from .utils import get_duration
-
+from django.conf import settings
 
 
 def profilePhotoPath(instance, default_name):
@@ -18,7 +18,7 @@ def trackCoverPath(instance, default_name):
 
 
 class Artist(models.Model):
-    account = models.OneToOneField("auth.User", on_delete=models.CASCADE, related_name="profile")
+    account = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
     nickname = models.CharField(max_length=80, unique=True)
     profile_photo = models.ImageField(upload_to=profilePhotoPath)
     banner = models.ImageField(upload_to=bannerPath)
