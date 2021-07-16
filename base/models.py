@@ -18,13 +18,10 @@ def trackCoverPath(instance, default_name):
 
 
 class Artist(models.Model):
-    account = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
-    nickname = models.CharField(max_length=80, unique=True)
+    account = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")  
     profile_photo = models.ImageField(upload_to=profilePhotoPath)
     banner = models.ImageField(upload_to=bannerPath)
     description = models.TextField(max_length=256)
-    #TODO: Use a appropriate location field
-    location = models.CharField(max_length=70, help_text="this is a placeholder, and will be changed with a location field")
 
     def __str__(self):
         return self.nickname
