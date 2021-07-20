@@ -5,15 +5,15 @@ from django.contrib.auth.models import _user_has_perm, _user_has_module_perms
 
 
 class AccountManager(BaseUserManager):
-    def _create_user(self, email, username, password, name, surname, age, gender, save):
+    def _create_user(self, email, username, password, name, surname, age, gender, location_node_id, save):
         if (email == None or username == None or password == None or name == None 
-            or surname == None or age == None or gender == None):
+            or surname == None or age == None or gender == None or location_node_id == None):
             raise ValueError("You cannot provide null fields")
         
         email = self.normalize_email(email)
 
         user = self.model(username=username, email=email, name=name, surname=surname,
-            age=age, gender=gender)
+            age=age, gender=gender, location_node_id=location_node_id)
         user.set_password(password)
         
         if save: 
@@ -21,11 +21,11 @@ class AccountManager(BaseUserManager):
         return user
         
 
-    def create_user(self, email, username, password, name, surname, age, gender):
-        return self._create_user(email, username, password, name, surname, age, gender, True)
+    def create_user(self, email, username, password, name, surname, age, gender, location_node_id):
+        return self._create_user(email, username, password, name, surname, age, gender, location_node_id, True)
 
-    def create_superuser(self, email, username, password, name, surname, age, gender):
-        user = self._create_user(email, username, password, name, surname, age, gender, False)
+    def create_superuser(self, email, username, password, name, surname, age, gender, location_node_id):
+        user = self._create_user(email, username, password, name, surname, age, gender, location_node_id, False)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
