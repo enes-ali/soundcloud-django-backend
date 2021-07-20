@@ -4,16 +4,16 @@ from django.conf import settings
 
 
 def profilePhotoPath(instance, default_name):
-    return f"Artists/{instance.nickname}/photos/profile/{default_name}"
+    return f"Artists/{instance.account.username}/photos/profile/{default_name}"
 
 def bannerPath(instance, default_name):
-    return f"Artists/{instance.nickname}/photos/banner/{default_name}"
+    return f"Artists/{instance.account.username}/photos/banner/{default_name}"
 
 def trackSourcePath(instance, default_name):
-    return f"Artists/{instance.artist.nickname}/tracks/{instance.title}/sources/{default_name}"
+    return f"Artists/{instance.artist.account.username}/tracks/{instance.title}/sources/{default_name}"
 
 def trackCoverPath(instance, default_name):
-    return f"Artists/{instance.artist.nickname}/tracks/{instance.title}/covers/{default_name}"
+    return f"Artists/{instance.artist.account.username}/tracks/{instance.title}/covers/{default_name}"
 
 
 
