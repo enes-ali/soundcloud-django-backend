@@ -23,13 +23,13 @@ class ModelTestCase(TestCase):
         cover_file = ImageFile(open(base_path + "/track_cover.jpg", "rb"),
             "cover.jpg")
 
-        # Create user
-        user = Account.objects.create_user(email="enes@gmail.com", username="LastShoot",
-            password="Enes123", name="Enes", surname="Karakobak", age=17, gender=Account.MALE)
+        # Create Account
+        account = Account.objects.create_user(email="enes@gmail.com", username="LastShoot",
+            password="Enes123", name="Enes", surname="Karakobak", age=17, gender=Account.MALE, location_node_id=246853179)
 
-        ## Create artist
-        artist = Artist.objects.create(account=user, nickname="Otnicka", profile_photo=profile_photo_file,
-        banner=banner_file, description="test account", location="test location")
+        ## Create artist /* Profile */
+        artist = Artist.objects.create(account=account, profile_photo=profile_photo_file,
+        banner=banner_file, description="test account")
 
         ## Create Track
         date = datetime.datetime.now()
@@ -38,8 +38,9 @@ class ModelTestCase(TestCase):
 
 
     def test_artist(self):
-        artist = Artist.objects.get(nickname="Otnicka")
-        self.assertNotEqual(artist, None)
+        account = Account.objects.get(username="LastShoot")
+        self.assertNotEqual(account, None)
+        self.assertNotEqual(account.profile, None)
 
     def test_track(self):
         track = Track.objects.get(title="Uletay (feat. VERA)", artist=1)
