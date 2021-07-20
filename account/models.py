@@ -42,6 +42,9 @@ class Account(AbstractBaseUser):
     surname = models.CharField(max_length=32)
     age =  models.PositiveIntegerField()
     
+    # Id of a location node from geoencoding api
+    location_node_id = models.BigIntegerField(verbose_name="loaction node id")
+
     MALE = 'ML'
     FEMALE = 'FM'
     OTHER = 'OT'
