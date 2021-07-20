@@ -22,6 +22,7 @@ class Artist(models.Model):
     profile_photo = models.ImageField(upload_to=profilePhotoPath)
     banner = models.ImageField(upload_to=bannerPath)
     description = models.TextField(max_length=256)
+    following = models.ManyToManyField("self", related_name='followers', null=True, blank=True)
 
     def __str__(self):
         return self.nickname
