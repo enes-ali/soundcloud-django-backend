@@ -56,6 +56,14 @@ class ModelTestCase(TestCase):
             location_node_id=246818179)
         repost = Repost.objects.create(account=repost_account, track=track)
 
+
+        ## Create Playlist
+        playlist_cover_file = ImageFile(open(base_path + "/playlist_cover.jpeg", "rb"), "playlist_cover.jpg")
+        playlist = Playlist.objects.create(account=account, title="Best Playlist", cover=playlist_cover_file)
+        playlist.tracks.add(track)
+
+
+
     def test_artist(self):
         account = Account.objects.get(username="LastShoot")
         self.assertNotEqual(account, None)
@@ -102,6 +110,15 @@ class ModelTestCase(TestCase):
             repost = None
 
         self.assertNotEqual(repost, None)
+
+
+    def test_playlist(self):
+        try:
+            playlist = Playlist.objects.get(title="Best Playlist")
+        except ObjectDoesNotExist as e:
+            playlist = None
+
+        self.assertNotEqual(playlist, None)
         
         
         

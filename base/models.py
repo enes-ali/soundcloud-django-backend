@@ -15,6 +15,8 @@ def trackSourcePath(instance, default_name):
 def trackCoverPath(instance, default_name):
     return f"Artists/{instance.artist.account.username}/tracks/{instance.title}/covers/{default_name}"
 
+def playlistCoverPath(instance, default_name):
+    return f"Artists/{instance.account.username}/playlists/{instance.title}/covers/{default_name}"
 
 
 class Artist(models.Model):
@@ -86,4 +88,15 @@ class Repost(models.Model):
     def __str__(self):
         return self.account.username + " " + self.track.title
 
+
+
+class Playlist(models.Model):
+    account = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="playlists")
+    tracks = models.ManyToManyField(Track, related_name="playlists")
+    create_date = models.DateField(auto_now_add=True)
+    title = models.CharField(max_length=64)
+    cover = models.ImageField(upload_to=playlistCoverPath, null=True, blank=True)
+
+    def __str__(self):
+        return self.account.username + " " + self.title
 
