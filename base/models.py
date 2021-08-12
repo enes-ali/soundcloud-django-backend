@@ -37,27 +37,6 @@ class Track(models.Model):
     upload_date = models.DateField(auto_now_add=True)
     genre = models.ForeignKey("base.TrackGenre", related_name="tracks", on_delete=models.CASCADE)
 
-    '''
-    ELECTRONIC = "ELC"
-    COUNTRY = "CTR"
-    HIP_HOP = "HPHP"
-    ROCK = "RCK"
-    JAZZ = "JAZZ"
-    METAL = "MTL"
-    POP = "POP"
-    FUNK = "FUNK"
-    GENRE_CHOICES = [
-        (ELECTRONIC, "Electronic"),
-        (COUNTRY, "Country"),
-        (HIP_HOP, "Hip-Hop"),
-        (ROCK, "Rock"),
-        (JAZZ, "Jazz"),
-        (METAL, "Metal"),
-        (POP, "Pop"),
-        (FUNK, "Funk")
-    ]
-    genre = models.CharField(max_length=4, choices=GENRE_CHOICES)
-    '''
     def __str__(self):
         return self.title + "   " + self.artist.nickname
         
