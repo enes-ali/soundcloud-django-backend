@@ -26,6 +26,7 @@ class Artist(models.Model):
     description = models.TextField(max_length=256)
     following = models.ManyToManyField("self", related_name='followers', blank=True)
     liked_tracks = models.ManyToManyField("base.Track", related_name="likes", blank=True)
+    liked_playlists = models.ManyToManyField("base.Playlist", related_name="likes", blank=True)
 
     def __str__(self):
         return self.nickname

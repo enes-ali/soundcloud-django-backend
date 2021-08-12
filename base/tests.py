@@ -84,6 +84,15 @@ class ModelTestCase(TestCase):
         self.assertNotEqual(track, None)
         self.assertEqual(track.duration, 190.584) # test duration function
         
+    def test_track_like(self):
+        print("Test track liking", "\n")
+        track = Track.objects.get(title="Uletay (feat. VERA)", artist=1)
+        account = Account.objects.get(username="LastShoot")
+        account.profile.liked_tracks.add(track)
+        
+        self.assertEqual(account.profile.liked_tracks.get(title="Uletay (feat. VERA)"), track)
+        self.assertEqual(track.likes.count(), 1)
+
         
     def test_track_comment(self):
         print("Test track comment creation", "\n")
@@ -115,6 +124,16 @@ class ModelTestCase(TestCase):
 
         self.assertNotEqual(playlist, None)
         
+    def test_playlist_like(self):
+        print("Test playlist liking", "\n")
+        playlist = Playlist.objects.get(title="Best Playlist")
+        account = Account.objects.get(username="LastShoot")
+        account.profile.liked_playlists.add(playlist)
+        
+        self.assertEqual(account.profile.liked_playlists.get(title="Best Playlist"), playlist)
+        self.assertEqual(playlist.likes.count(), 1)
+
+
     def test_repost(self):
         print("Test repost creation", "\n")
         repost_account = Account.objects.get(email="reposter@gmail.com")
