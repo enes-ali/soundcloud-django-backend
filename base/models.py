@@ -15,6 +15,8 @@ def trackSourcePath(instance, default_name):
 def trackCoverPath(instance, default_name):
     return f"Artists/{instance.artist.account.username}/tracks/{instance.title}/covers/{default_name}"
 
+def playlistCoverPath(instance, default_name):
+    return f"Artists/{instance.account.username}/playlists/{instance.title}/covers/{default_name}"
 
 
 class Artist(models.Model):
@@ -24,6 +26,7 @@ class Artist(models.Model):
     description = models.TextField(max_length=256)
     following = models.ManyToManyField("self", related_name='followers', blank=True)
     liked_tracks = models.ManyToManyField("base.Track", related_name="likes", blank=True)
+    liked_playlists = models.ManyToManyField("base.Playlist", related_name="likes", blank=True)
 
     def __str__(self):
         return self.nickname
@@ -80,10 +83,32 @@ class TrackGenre(models.Model):
 
 class Repost(models.Model):
     account = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="reposts", on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="reposts")
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="reposts", null=True, blank=True)
+    playlist = models.ForeignKey("base.Playlist", on_delete=models.CASCADE, related_name="reposts", null=True, blank=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.account.username + " " + self.track.title
 
+    def save(self, *args, **kwargs):
+        if(self.track == None and self.playlist == None):
+            raise Exception("You should provide a track or a playlist to a repost")
+        
+        if(self.track != None and self.playlist != None):
+            raise Exception("You can repost a track or a playlist, don't provide them both")
+
+        super().save(*args, **kwargs)
+
+
+class Playlist(models.Model):
+    account = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="playlists")
+    tracks = models.ManyToManyField(Track, related_name="playlists")
+    create_date = models.DateField(auto_now_add=True)
+    title = models.CharField(max_length=64)
+    cover = models.ImageField(upload_to=playlistCoverPath, null=True, blank=True)
+    description = models.CharField(max_length=8000)
+    tags = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.account.username + " " + self.title
 
