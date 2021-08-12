@@ -50,6 +50,12 @@ class ModelTestCase(TestCase):
         reply_to_reply_comment = TrackComment.objects.create(account=account, track=track, content="I love it to!",
         time=1.25, replied_to=reply_comment, date=None)
 
+        ## Create Repost
+        repost_account = Account.objects.create_user(email="reposter@gmail.com", username="RepostMaster",
+            password="repost123", name="Re", surname="Post", age=25, gender=Account.MALE,
+            location_node_id=246818179)
+        repost = Repost.objects.create(account=repost_account, track=track)
+
     def test_artist(self):
         account = Account.objects.get(username="LastShoot")
         self.assertNotEqual(account, None)
@@ -86,7 +92,16 @@ class ModelTestCase(TestCase):
         self.assertEqual(reply_to_reply_comment, None)
 
         
-        
+    def test_repost(self):
+        repost_account = Account.objects.get(email="reposter@gmail.com")
+        track = Track.objects.get(title="Uletay (feat. VERA)")
+
+        try:
+            repost = Repost.objects.get(account=repost_account, track=track)
+        except ObjectDoesNotExist as e:
+            repost = None
+
+        self.assertNotEqual(repost, None)
         
         
         
