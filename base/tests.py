@@ -32,10 +32,11 @@ class ModelTestCase(TestCase):
         artist = Artist.objects.create(account=account, profile_photo=profile_photo_file,
         banner=banner_file, description="test account")
 
-        ## Create Track
+        ## Create Track and TrackGenre
         date = datetime.datetime.now()
+        genre = TrackGenre.objects.create(name="Deep House")
         track = Track.objects.create(artist=artist, title="Uletay (feat. VERA)", 
-            source=track_file, duration=3, cover=cover_file, upload_date=date, genre="ELC")
+            source=track_file, duration=3, cover=cover_file, upload_date=date, genre=genre)
 
         ## Creare comments
         new_comment = TrackComment.objects.create(account=account, track=track, content="Love it!",
@@ -52,11 +53,16 @@ class ModelTestCase(TestCase):
         self.assertNotEqual(account, None)
         self.assertNotEqual(account.profile, None)
 
+    def test_genre(self):
+        genre = TrackGenre.objects.get(name="Deep House")
+
+        self.assertNotEqual(genre, None)
+
     def test_track(self):
         track = Track.objects.get(title="Uletay (feat. VERA)", artist=1)
 
         self.assertNotEqual(track, None)
-        self.assertEqual(track.duration, 190.584)
+        self.assertEqual(track.duration, 190.584) # test duration function
         
         
     def test_track_comment(self):

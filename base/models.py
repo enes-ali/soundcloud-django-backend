@@ -35,26 +35,7 @@ class Track(models.Model):
     duration = models.FloatField(editable=False)
     cover = models.ImageField(upload_to=trackCoverPath)
     upload_date = models.DateField(auto_now_add=True)
-    
-    ELECTRONIC = "ELC"
-    COUNTRY = "CTR"
-    HIP_HOP = "HPHP"
-    ROCK = "RCK"
-    JAZZ = "JAZZ"
-    METAL = "MTL"
-    POP = "POP"
-    FUNK = "FUNK"
-    GENRE_CHOICES = [
-        (ELECTRONIC, "Electronic"),
-        (COUNTRY, "Country"),
-        (HIP_HOP, "Hip-Hop"),
-        (ROCK, "Rock"),
-        (JAZZ, "Jazz"),
-        (METAL, "Metal"),
-        (POP, "Pop"),
-        (FUNK, "Funk")
-    ]
-    genre = models.CharField(max_length=4, choices=GENRE_CHOICES)
+    genre = models.ForeignKey("base.TrackGenre", related_name="tracks", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title + "   " + self.artist.nickname
@@ -65,8 +46,7 @@ class Track(models.Model):
         super().save(*args, **kwargs)
     
     
-    
-    
+
     
 class TrackComment(models.Model):
     account = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="track_comments")
@@ -85,3 +65,11 @@ class TrackComment(models.Model):
             return Exception("can't reply to a reply comment")
 
         super().save(*args, **kwargs)
+
+
+
+class TrackGenre(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
