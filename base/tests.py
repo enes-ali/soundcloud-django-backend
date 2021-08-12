@@ -50,31 +50,35 @@ class ModelTestCase(TestCase):
         reply_to_reply_comment = TrackComment.objects.create(account=account, track=track, content="I love it to!",
         time=1.25, replied_to=reply_comment, date=None)
 
-        ## Create Repost
-        repost_account = Account.objects.create_user(email="reposter@gmail.com", username="RepostMaster",
-            password="repost123", name="Re", surname="Post", age=25, gender=Account.MALE,
-            location_node_id=246818179)
-        repost = Repost.objects.create(account=repost_account, track=track)
-
-
         ## Create Playlist
         playlist_cover_file = ImageFile(open(base_path + "/playlist_cover.jpeg", "rb"), "playlist_cover.jpg")
         playlist = Playlist.objects.create(account=account, title="Best Playlist", cover=playlist_cover_file)
         playlist.tracks.add(track)
 
+        ## Create Reposts
+        repost_account = Account.objects.create_user(email="reposter@gmail.com", username="RepostMaster",
+            password="repost123", name="Re", surname="Post", age=25, gender=Account.MALE,
+            location_node_id=246818179)
+        track_repost = Repost.objects.create(account=repost_account, track=track)
+        playlist_repost = Repost.objects.create(account=repost_account, playlist=playlist)
+
+
 
 
     def test_artist(self):
+        print("Test artist creation", "\n")
         account = Account.objects.get(username="LastShoot")
         self.assertNotEqual(account, None)
         self.assertNotEqual(account.profile, None)
 
     def test_genre(self):
+        print("Test genre creation", "\n")
         genre = TrackGenre.objects.get(name="Deep House")
 
         self.assertNotEqual(genre, None)
 
     def test_track(self):
+        print("Test track creation", "\n")
         track = Track.objects.get(title="Uletay (feat. VERA)", artist=1)
 
         self.assertNotEqual(track, None)
@@ -82,12 +86,14 @@ class ModelTestCase(TestCase):
         
         
     def test_track_comment(self):
+        print("Test track comment creation", "\n")
         new_comment = TrackComment.objects.get(content="Love it!")
         
         self.assertEqual(new_comment.content, "Love it!")
 
 
     def test_track_comment_reply(self):
+        print("Test replying to track comment", "\n")
         new_comment = TrackComment.objects.get(content="Love it!")
         reply_comment = TrackComment.objects.get(content="Me To!")
         
@@ -99,20 +105,9 @@ class ModelTestCase(TestCase):
         self.assertEqual(reply_comment.content, "Me To!")
         self.assertEqual(reply_to_reply_comment, None)
 
-        
-    def test_repost(self):
-        repost_account = Account.objects.get(email="reposter@gmail.com")
-        track = Track.objects.get(title="Uletay (feat. VERA)")
-
-        try:
-            repost = Repost.objects.get(account=repost_account, track=track)
-        except ObjectDoesNotExist as e:
-            repost = None
-
-        self.assertNotEqual(repost, None)
-
 
     def test_playlist(self):
+        print("Test playlist creation", "\n")
         try:
             playlist = Playlist.objects.get(title="Best Playlist")
         except ObjectDoesNotExist as e:
@@ -120,6 +115,52 @@ class ModelTestCase(TestCase):
 
         self.assertNotEqual(playlist, None)
         
+    def test_repost(self):
+        print("Test repost creation", "\n")
+        repost_account = Account.objects.get(email="reposter@gmail.com")
+        track = Track.objects.get(title="Uletay (feat. VERA)")
+        playlist = Playlist.objects.get(title="Best Playlist")
+
+        try:
+            track_repost = Repost.objects.get(account=repost_account, track=track)
+        except ObjectDoesNotExist as e:
+            track_repost = None
+
+        try:
+            playlist_repost = Repost.objects.get(account=repost_account, playlist=playlist)
+        except ObjectDoesNotExist as e:
+            playlist_repost = None
+
+        self.assertNotEqual(track_repost, None)
+        self.assertNotEqual(playlist_repost, None)
+
+        
+    def test_repost_none(self):
+        print("Test repost creation with track and playlist None", "\n")
+        repost_account = Account.objects.get(email="reposter@gmail.com")
+        
+        try:
+            repost_none = Repost.objects.create(account=repost_account)
+        except Exception as e:
+            print("\t" + str(e), "\n")
+            repost_none = None
+
+        self.assertEqual(repost_none, None)
+
+
+    def test_repost_both(self):
+        print("Test repost creation with track and playlist Not None", "\n")
+        repost_account = Account.objects.get(email="reposter@gmail.com")
+        track = Track.objects.get(title="Uletay (feat. VERA)")
+        playlist = Playlist.objects.get(title="Best Playlist")
+
+        try:
+            repost_both = Repost.objects.create(account=repost_account, track=track, playlist=playlist)
+        except Exception as e:
+            print("\t" + str(e), "\n")
+            repost_both = None
+
+        self.assertEqual(repost_both, None)
         
         
         

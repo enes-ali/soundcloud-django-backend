@@ -82,12 +82,21 @@ class TrackGenre(models.Model):
 
 class Repost(models.Model):
     account = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="reposts", on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="reposts")
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="reposts", null=True, blank=True)
+    playlist = models.ForeignKey("base.Playlist", on_delete=models.CASCADE, related_name="reposts", null=True, blank=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.account.username + " " + self.track.title
 
+    def save(self, *args, **kwargs):
+        if(self.track == None and self.playlist == None):
+            raise Exception("You should provide a track or a playlist to a repost")
+        
+        if(self.track != None and self.playlist != None):
+            raise Exception("You can repost a track or a playlist, don't provide them both")
+
+        super().save(*args, **kwargs)
 
 
 class Playlist(models.Model):
