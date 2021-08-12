@@ -22,7 +22,7 @@ class Artist(models.Model):
     profile_photo = models.ImageField(upload_to=profilePhotoPath)
     banner = models.ImageField(upload_to=bannerPath)
     description = models.TextField(max_length=256)
-    following = models.ManyToManyField("self", related_name='followers', null=True, blank=True)
+    following = models.ManyToManyField("self", related_name='followers', blank=True)
 
     def __str__(self):
         return self.nickname
@@ -68,7 +68,20 @@ class Track(models.Model):
     
     
     
-    
-    
+class TrackComment(models.Model):
+    account = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="track_comments")
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="comments")
+    content = models.CharField(max_length=600)
+    time = models.FloatField()
+    replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, default=None, related_name="replies")
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.track.title + " By" + self.account.username
         
-        
+    def save(self, *args, **kwargs):
+        # Check comment depth 
+        if self.replied_to is not None and self.replied_to.replied_to is not None:
+            return Exception("can't reply to a reply comment")
+
+        super().save(*args, **kwargs)

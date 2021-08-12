@@ -6,6 +6,7 @@ from django.core.files import File
 import datetime
 from django.conf import settings
 from account.models import Account
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class ModelTestCase(TestCase):
@@ -33,9 +34,18 @@ class ModelTestCase(TestCase):
 
         ## Create Track
         date = datetime.datetime.now()
-        Track.objects.create(artist=artist, title="Uletay (feat. VERA)", 
+        track = Track.objects.create(artist=artist, title="Uletay (feat. VERA)", 
             source=track_file, duration=3, cover=cover_file, upload_date=date, genre="ELC")
 
+        ## Creare comments
+        new_comment = TrackComment.objects.create(account=account, track=track, content="Love it!",
+            time=1.25, replied_to=None, date=None)
+
+        reply_comment = TrackComment.objects.create(account=account, track=track, content="Me To!",
+        time=1.25, replied_to=new_comment, date=None)
+
+        reply_to_reply_comment = TrackComment.objects.create(account=account, track=track, content="I love it to!",
+        time=1.25, replied_to=reply_comment, date=None)
 
     def test_artist(self):
         account = Account.objects.get(username="LastShoot")
@@ -49,8 +59,24 @@ class ModelTestCase(TestCase):
         self.assertEqual(track.duration, 190.584)
         
         
+    def test_track_comment(self):
+        new_comment = TrackComment.objects.get(content="Love it!")
         
+        self.assertEqual(new_comment.content, "Love it!")
+
+
+    def test_track_comment_reply(self):
+        new_comment = TrackComment.objects.get(content="Love it!")
+        reply_comment = TrackComment.objects.get(content="Me To!")
         
+        try:
+            reply_to_reply_comment = TrackComment.objects.get(content="I love it to!")
+        except ObjectDoesNotExist as e:
+            reply_to_reply_comment = None
+
+        self.assertEqual(reply_comment.content, "Me To!")
+        self.assertEqual(reply_to_reply_comment, None)
+
         
         
         
