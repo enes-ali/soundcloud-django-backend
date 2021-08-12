@@ -26,7 +26,8 @@ class ModelTestCase(TestCase):
 
         # Create Account
         account = Account.objects.create_user(email="enes@gmail.com", username="LastShoot",
-            password="Enes123", name="Enes", surname="Karakobak", age=17, gender=Account.MALE, location_node_id=246853179)
+            password="Enes123", name="Enes", surname="Karakobak", age=17, gender=Account.MALE,
+            location_node_id=246853179)
 
         ## Create artist /* Profile */
         artist = Artist.objects.create(account=account, profile_photo=profile_photo_file,
