@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(Artist)
 admin.site.register(Track)
 admin.site.register(TrackComment)
+admin.site.register(TrackGenre)

@@ -65,8 +65,7 @@ class Track(models.Model):
         super().save(*args, **kwargs)
     
     
-    
-    
+
     
 class TrackComment(models.Model):
     account = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="track_comments")
@@ -85,3 +84,11 @@ class TrackComment(models.Model):
             return Exception("can't reply to a reply comment")
 
         super().save(*args, **kwargs)
+
+
+
+class TrackGenre(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
