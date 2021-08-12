@@ -35,7 +35,9 @@ class Track(models.Model):
     duration = models.FloatField(editable=False)
     cover = models.ImageField(upload_to=trackCoverPath)
     upload_date = models.DateField(auto_now_add=True)
-    
+    genre = models.ForeignKey("base.TrackGenre", related_name="tracks", on_delete=models.CASCADE)
+
+    '''
     ELECTRONIC = "ELC"
     COUNTRY = "CTR"
     HIP_HOP = "HPHP"
@@ -55,7 +57,7 @@ class Track(models.Model):
         (FUNK, "Funk")
     ]
     genre = models.CharField(max_length=4, choices=GENRE_CHOICES)
-
+    '''
     def __str__(self):
         return self.title + "   " + self.artist.nickname
         
