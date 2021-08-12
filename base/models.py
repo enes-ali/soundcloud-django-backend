@@ -76,3 +76,14 @@ class TrackGenre(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Repost(models.Model):
+    account = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="reposts", on_delete=models.CASCADE)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="reposts")
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.account.username + " " + self.track.title
+
+
