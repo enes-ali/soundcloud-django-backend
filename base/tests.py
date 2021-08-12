@@ -36,7 +36,7 @@ class ModelTestCase(TestCase):
         date = datetime.datetime.now()
         genre = TrackGenre.objects.create(name="Deep House")
         track = Track.objects.create(artist=artist, title="Uletay (feat. VERA)", 
-            source=track_file, duration=3, cover=cover_file, upload_date=date, genre=genre)
+            source=track_file, duration=3, cover=cover_file, upload_date=date, genre=genre, tag="Deep")
 
         ## Creare comments
         new_comment = TrackComment.objects.create(account=account, track=track, content="Love it!",
