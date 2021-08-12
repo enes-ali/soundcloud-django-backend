@@ -36,6 +36,7 @@ class Track(models.Model):
     cover = models.ImageField(upload_to=trackCoverPath)
     upload_date = models.DateField(auto_now_add=True)
     genre = models.ForeignKey("base.TrackGenre", related_name="tracks", on_delete=models.CASCADE)
+    tag = models.CharField(max_length=64)
 
     def __str__(self):
         return self.title + "   " + self.artist.nickname
