@@ -52,7 +52,8 @@ class ModelTestCase(TestCase):
 
         ## Create Playlist
         playlist_cover_file = ImageFile(open(base_path + "/playlist_cover.jpeg", "rb"), "playlist_cover.jpg")
-        playlist = Playlist.objects.create(account=account, title="Best Playlist", cover=playlist_cover_file)
+        playlist = Playlist.objects.create(account=account, title="Best Playlist", cover=playlist_cover_file,
+            description="fresh playlist", tags="chill fresh")
         playlist.tracks.add(track)
 
         ## Create Reposts

@@ -106,6 +106,8 @@ class Playlist(models.Model):
     create_date = models.DateField(auto_now_add=True)
     title = models.CharField(max_length=64)
     cover = models.ImageField(upload_to=playlistCoverPath, null=True, blank=True)
+    description = models.CharField(max_length=8000)
+    tags = models.CharField(max_length=500)
 
     def __str__(self):
         return self.account.username + " " + self.title
