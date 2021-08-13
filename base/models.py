@@ -112,3 +112,25 @@ class Playlist(models.Model):
     def __str__(self):
         return self.account.username + " " + self.title
 
+
+
+
+class Play(models.Model):
+    account = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name="plays")
+    date = models.DateField(auto_now_add=True)
+    play_count = models.PositiveIntegerField(default=0)
+    location_node_id = models.BigIntegerField(verbose_name="loaction node id", null=True, blank=True)
+
+    def __str__(self):
+        return self.account.username + "  " +self.track.title
+
+    def play(self):
+        self.play_count += 1
+        self.save()
+
+    def save(self, *args, **kwargs):
+        if self.account != None and self.location_node_id == None:
+            self.location_node_id = self.account.location_node_id
+
+        super().save(*args, **kwargs)
