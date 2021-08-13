@@ -63,8 +63,9 @@ class ModelTestCase(TestCase):
         track_repost = Repost.objects.create(account=repost_account, track=track)
         playlist_repost = Repost.objects.create(account=repost_account, playlist=playlist)
 
-
-
+        ## Create Play
+        play = Play.objects.create(account=account, track=track, date=datetime.datetime.now())
+        play.play()
 
     def test_artist(self):
         print("Test artist creation", "\n")
@@ -182,6 +183,44 @@ class ModelTestCase(TestCase):
 
         self.assertEqual(repost_both, None)
         
+    
+    def test_plays_by_account(self):
+        print("Test plays by account", "\n")
+        account = Account.objects.get(username="LastShoot")
+        track = Track.objects.get(title="Uletay (feat. VERA)")
         
+        play, is_created = Play.objects.get_or_create(account=account, track=track, date=datetime.datetime.now())
+        self.assertEqual(is_created, False)
         
+        play.play()
+        self.assertEqual(play.play_count, 2)
+        
+
+    def test_plays_by_date(self):
+        print("Test plays by date", "\n")
+        track = Track.objects.get(title="Uletay (feat. VERA)")
+        date_today = datetime.datetime.now()
+
+        play1, is_created = Play.objects.get_or_create(track=track, date=date_today, account=None)
+        play1.play()
+
+        play2, is_created = Play.objects.get_or_create(track=track, date=date_today, account=None)
+        play2.play()
+        
+        play3, is_created = Play.objects.get_or_create(track=track, date=date_today, account=None)
+        play3.play()
+        
+        play4, is_created = Play.objects.get_or_create(track=track, date=date_today, account=None)
+        play4.play()
+
+        todays_anonymous_plays = Play.objects.get(track=track, date=date_today, account=None)
+        self.assertEqual(todays_anonymous_plays.play_count, 4)
+
+        todays_all_plays = Play.objects.filter(track=track, date=date_today)
+        todays_all_pcount = 0
+        for play in todays_all_plays:
+            todays_all_pcount += play.play_count
+        self.assertEqual(todays_all_pcount, 5)
+
+        self.assertEqual(track.plays.count(), 2)
 
